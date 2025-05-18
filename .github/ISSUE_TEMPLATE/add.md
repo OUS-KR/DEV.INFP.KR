@@ -2,7 +2,9 @@
 name: 링크 추가
 about: 기존 사용자 페이지에 링크를 추가합니다.
 title: "[Add] 링크 추가 요청"
-labels: [add]
+labels: ''
+assignees: ''
+
 ---
 
 ID: myid  
