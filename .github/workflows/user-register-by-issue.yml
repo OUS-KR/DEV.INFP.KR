@@ -23,7 +23,7 @@ jobs:
       run: |
         echo "${{ github.event.issue.body }}" > issue_body.txt
         
-        USER_ID=$(sed -n '/^### 사용자 아이디$/ {n; s/\r//; p;}' issue_body.txt)
+        USER_ID=$(tail -n1 issue_body.txt | tr -d '\r\n')
         echo "Extracted USER_ID: $USER_ID"
         
         if [[ ! "$USER_ID" =~ ^[a-z0-9]([a-z0-9\-_]{1,28})[a-z0-9]$ ]]; then
