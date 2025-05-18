@@ -4,7 +4,14 @@ about: "{도메인}/u/{사용자_아이디} 주소 사용을 위한 사용자 �
 title: "[Register] 사용자 등록"
 labels: user-register
 assignees: OUS-KR
-
+body:
+  - type: input
+    id: user-id
+    attributes:
+      label: 사용자 아이디
+      description: "3자리 이상 30자리 이하의 영문 소문자 (a-z), 숫자 (0-9), 하이픈 (-), 언더스코어 (_)만 사용 가능하며, 시작과 끝은 영어 소문자와 숫자만 가능"
+      placeholder: "예: my_user-id"
+      pattern: "^[a-z0-9][a-z0-9-_]{1,28}[a-z0-9]$"
+    validations:
+      required: true
 ---
-
-Test
