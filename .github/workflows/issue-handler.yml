@@ -5,7 +5,7 @@ on:
     branches:
       - main
   issues:
-    types: [opened, edited, labeled]  # 이슈 이벤트 감지 가능 (필요시)
+    types: [opened, edited, labeled]
 
 jobs:
   build-and-deploy:
@@ -17,9 +17,6 @@ jobs:
       with:
         ref: main
 
-    # 필요한 빌드나 파일 생성 스크립트 있으면 여기서 실행
-    # 예: node script.js, python build.py 등
-
     - name: Setup Git
       run: |
         git config user.name "github-actions[bot]"
@@ -30,17 +27,18 @@ jobs:
         git fetch origin gh-pages
         git switch gh-pages || git checkout -b gh-pages
 
-        # gh-pages 브랜치 초기화 (필요하면)
+        # gh-pages 브랜치 초기화
         git rm -rf .
 
-        # main 브랜치의 /u 디렉토리만 복사
-        git checkout main -- u
+        # main 브랜치의 public 폴더 전체를 복사 (index.html, ads.txt, CNAME, u 포함)
+        git checkout main -- public
 
-        # 복사한 파일 추가
-        git add u
+        # 복사된 public 폴더를 루트로 이동
+        mv public/* .
+        rm -rf public
 
-        # 커밋
-        git commit -m "Update user pages from main branch"
+        git add .
 
-        # 푸시
+        git commit -m "Deploy site from main/public to gh-pages"
+
         git push origin gh-pages --force
