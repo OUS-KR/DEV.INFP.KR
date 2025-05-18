@@ -1,0 +1,77 @@
+name: User register by issue
+  
+on:
+  issues:
+    types: [opened]
+    
+jobs:
+  user-register:
+    if: github.event.label.name == 'user-register'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout main branch
+      uses: actions/checkout@v3
+      with:
+        ref: main
+        
+    - name: Extract user ID from issue body
+      id: extract
+      run: |
+        echo "${{ github.event.issue.body }}" > issue_body.txt
+        USER_ID=$(grep -oP '(?<=### 사용자 아이디\s*\n)[a-z0-9][a-z0-9-_]{1,28}[a-z0-9]' issue_body.txt | head -n1)
+        
+        if [[ ! "$USER_ID" =~ ^[a-z0-9]([a-z0-9\-_]{1,28})[a-z0-9]$ ]]; then
+          echo "올바르지 않은 아이디 형식" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          echo "user_id=" >> $GITHUB_OUTPUT
+          exit 0
+        fi
+        
+        echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
+        
+    - name: Check if user already exists
+      env:
+        USER_ID: ${{ github.event.issue.body }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+      run: |
+        USER_ID=$(echo "$USER_ID" | grep -oP '(?<=user-id:\s)[a-z0-9_-]+')
+        if [ -d "public/u/$USER_ID" ]; then
+          echo "사용할 수 없는 사용자 아이디: **$USER_ID**" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          exit 1
+        fi
+        
+    - name: Setup Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        
+    - name: Create user page
+      run: |
+        USER_ID=${{ steps.extract.outputs.user_id }}
+        mkdir -p "public/u/$USER_ID"
+        sed "s/\${USER_ID}/$USER_ID/g" templates/user.html > "public/u/$USER_ID/index.html"
+        
+    - name: Commit and push to gh-pages
+      run: |
+        git fetch origin gh-pages
+        git switch gh-pages || git checkout -b gh-pages
+
+        USER_ID=${{ steps.extract.outputs.user_id }}
+        mkdir -p u
+        git checkout main -- public/u/$USER_ID
+
+        # 복사한 디렉토리를 루트로 이동
+        mv public/u/$USER_ID u/
+
+        git add u/$USER_ID
+        git commit -m "Add user page: $USER_ID"
+        git push origin gh-pages
+        
+    - name: Comment on issue
+      env:
+        USER_ID: ${{ env.USER_ID }}
+      run: |
+        echo "사용자 **$USER_ID** 등록 완료" > comment.md
+        gh issue comment ${{ github.event.issue.number }} -F comment.md
