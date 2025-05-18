@@ -81,6 +81,22 @@ jobs:
         git commit -m "Add user directory for $USER_ID and registered user info" || echo "Nothing to commit"
         git push origin main
         
+    - name: Commit and push to gh-pages
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+      run: |
+        cp -r public/u/$USER_ID /tmp/$USER_ID
+        
+        git fetch origin gh-pages
+        git switch gh-pages || git checkout -b gh-pages
+        
+        mkdir -p u
+        cp -r /tmp/$USER_ID u/
+        
+        git add u/$USER_ID || true
+        git commit -m "Add user page: $USER_ID" || echo "Nothing to commit"
+        git push origin gh-pages
+        
     - name: Comment on issue
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
