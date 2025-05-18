@@ -62,9 +62,6 @@ jobs:
         mkdir -p "public/u/$USER_ID"
         sed "s/\${USER_ID}/$USER_ID/g" templates/user.html > "public/u/$USER_ID/index.html"
         
-        mkdir -p registered/users
-        touch registered/users/$GITHUB_ID
-        
         cat <<EOF > public/u/$USER_ID/meta.json
         {
           "github_id": "$GITHUB_ID",
@@ -72,13 +69,16 @@ jobs:
         }
         EOF
         
+        mkdir -p registered/users
+        touch registered/users/$GITHUB_ID
+        
     - name: Commit and push to main
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
       run: |
         git checkout main
-        git add public/u/$USER_ID || true
-        git commit -m "Add user directory for $USER_ID" || echo "Nothing to commit"
+        git add public/u/$USER_ID registered/users/$GITHUB_ID || true
+        git commit -m "Add user directory for $USER_ID and registered user info" || echo "Nothing to commit"
         git push origin main
         
     - name: Commit and push to gh-pages
