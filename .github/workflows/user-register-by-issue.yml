@@ -67,8 +67,7 @@ jobs:
         git switch gh-pages || git checkout -b gh-pages
         
         mkdir -p u
-        git checkout main -- public/u/$USER_ID
-        mv public/u/$USER_ID u/
+        cp -r public/u/$USER_ID u/
         
         git add u/$USER_ID
         git commit -m "Add user page: $USER_ID"
