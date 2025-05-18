@@ -69,8 +69,8 @@ jobs:
         }
         EOF
         
-        mkdir -p records/users
-        touch records/users/$GITHUB_ID
+        mkdir -p registered/users
+        touch registered/users/$GITHUB_ID
         
     - name: Commit and push to main
       env:
