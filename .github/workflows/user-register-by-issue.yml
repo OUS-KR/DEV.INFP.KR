@@ -2,7 +2,7 @@ name: User register by issue
   
 on:
   issues:
-    types: [opened]
+    types: [opened, closed, reopened]
     
 jobs:
   user-register:
