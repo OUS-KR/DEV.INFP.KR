@@ -74,6 +74,8 @@ jobs:
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
       run: |
+        cp -r public/u/$USER_ID /tmp/$USER_ID
+        
         git fetch origin gh-pages
         git switch gh-pages || git checkout -b gh-pages
         
