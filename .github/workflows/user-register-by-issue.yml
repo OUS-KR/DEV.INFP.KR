@@ -53,9 +53,8 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         
     - name: Create user page
-      env:
-        USER_ID: ${{ steps.extract.outputs.user_id }}
       run: |
+        USER_ID="${{ steps.extract.outputs.user_id }}"
         mkdir -p "public/u/$USER_ID"
         sed "s/\${USER_ID}/$USER_ID/g" templates/user.html > "public/u/$USER_ID/index.html"
         
