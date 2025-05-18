@@ -23,7 +23,7 @@ jobs:
       run: |
         echo "${{ github.event.issue.body }}" > issue_body.txt
         
-        USER_ID=$(tail -n1 issue_body.txt | tr -d '\r\n')
+        USER_ID=$(tail -n1 issue_body.txt | sed 's/^[ \t]*//;s/[ \t]*$//')
         echo "Extracted USER_ID: $USER_ID"
         
         if [[ ! "$USER_ID" =~ ^[a-z0-9]([a-z0-9\-_]{1,28})[a-z0-9]$ ]]; then
@@ -34,10 +34,6 @@ jobs:
         fi
         
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
-        
-        echo "user_id<<EOF" >> $GITHUB_OUTPUT
-        echo "$USER_ID" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
         
     - name: Check if user already exists
       env:
