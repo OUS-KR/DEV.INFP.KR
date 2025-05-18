@@ -62,15 +62,15 @@ jobs:
         mkdir -p "public/u/$USER_ID"
         sed "s/\${USER_ID}/$USER_ID/g" templates/user.html > "public/u/$USER_ID/index.html"
         
+        mkdir -p registered/users
+        touch registered/users/$GITHUB_ID
+        
         cat <<EOF > public/u/$USER_ID/meta.json
         {
           "github_id": "$GITHUB_ID",
           "created_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
         }
         EOF
-        
-        mkdir -p registered/users
-        touch registered/users/$GITHUB_ID
         
     - name: Commit and push to main
       env:
