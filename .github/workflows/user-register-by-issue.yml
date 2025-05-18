@@ -29,11 +29,11 @@ jobs:
         if [[ ! "$USER_ID" =~ ^[a-z0-9]([a-z0-9\-_]{1,28})[a-z0-9]$ ]]; then
           echo "올바르지 않은 아이디 형식" > comment.md
           gh issue comment "$ISSUE_NUMBER" -F comment.md
-          echo "user_id=" >> "$GITHUB_OUTPUT"
+          echo "user_id=''" >> $GITHUB_OUTPUT
           exit 0
         fi
         
-        echo "user_id=$USER_ID" >> "$GITHUB_OUTPUT"
+        echo "user_id='$USER_ID'" >> $GITHUB_OUTPUT
         
     - name: Check if user already exists
       env:
