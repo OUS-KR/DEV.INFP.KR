@@ -15,6 +15,18 @@ jobs:
       with:
         ref: main
         
+    - name: Check if user already registered
+      env:
+        GITHUB_ID: ${{ github.event.issue.user.login }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ -f "registered/users/$GITHUB_ID" ]; then
+          echo "이미 사용자 아이디를 등록한 Github 사용자: **@$GITHUB_ID**" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          exit 1
+        fi
+        
     - name: Extract user ID from issue body
       env:
         ISSUE_NUMBER: ${{ github.event.issue.number }}
