@@ -26,7 +26,7 @@ jobs:
         USER_ID=$(grep -v '^\s*$' issue_body.txt | tail -n1 | sed 's/^[ \t]*//;s/[ \t]*$//')
         echo "Extracted USER_ID: $USER_ID"
         
-        if [[ ! "$USER_ID" =~ ^[a-z0-9]([a-z0-9\-_]{1,28})[a-z0-9]$ ]]; then
+        if [[ ! "$USER_ID" =~ ^[a-z0-9][a-z0-9\-_]{1,28}[a-z0-9]$ ]]; then
           echo "올바르지 않은 아이디 형식" > comment.md
           gh issue comment "$ISSUE_NUMBER" -F comment.md
           echo "user_id=" >> $GITHUB_OUTPUT
