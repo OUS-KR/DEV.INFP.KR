@@ -35,6 +35,10 @@ jobs:
         
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         
+        echo "user_id<<EOF" >> $GITHUB_OUTPUT
+        echo "$USER_ID" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        
     - name: Check if user already exists
       env:
         ISSUE_NUMBER: ${{ github.event.issue.number }}
