@@ -6,7 +6,7 @@ on:
     
 jobs:
   user-register:
-    if: github.event.label.name == 'user-register'
+    if: contains(github.event.issue.labels.*.name, 'user-register')
     runs-on: ubuntu-latest
     
     steps:
