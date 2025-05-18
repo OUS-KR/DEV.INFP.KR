@@ -16,6 +16,8 @@ jobs:
         ref: main
         
     - name: Extract user ID from issue body
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       id: extract
       run: |
         echo "${{ github.event.issue.body }}" > issue_body.txt
@@ -34,6 +36,7 @@ jobs:
       env:
         USER_ID: ${{ github.event.issue.body }}
         ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         USER_ID=$(echo "$USER_ID" | grep -oP '(?<=user-id:\s)[a-z0-9_-]+')
         if [ -d "public/u/$USER_ID" ]; then
