@@ -17,6 +17,7 @@ jobs:
         
     - name: Extract user ID from issue body
       env:
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       id: extract
       run: |
