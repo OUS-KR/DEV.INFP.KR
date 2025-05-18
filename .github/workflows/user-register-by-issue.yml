@@ -21,7 +21,7 @@ jobs:
       id: extract
       run: |
         echo "${{ github.event.issue.body }}" > issue_body.txt
-        USER_ID=$(sed -n '/### 사용자 아이디/{n;p;}' issue_body.txt | grep -oE '^[a-z0-9][a-z0-9-_]{1,28}[a-z0-9]$' | head -n1)
+        USER_ID=$(sed -n '/### 사용자 아이디/{n;p;}' issue_body.txt | grep -oE '^[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]$' | head -n1)
         
         if [[ -z "$USER_ID" ]]; then
           echo "올바르지 않은 아이디 형식" > comment.md
