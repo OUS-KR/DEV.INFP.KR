@@ -80,7 +80,7 @@ jobs:
         git switch gh-pages || git checkout -b gh-pages
         
         mkdir -p u
-        cp -r public/u/$USER_ID u/
+        cp -r /tmp/$USER_ID u/
         
         git add u/$USER_ID || true
         git commit -m "Add user page: $USER_ID" || echo "Nothing to commit"
