@@ -66,7 +66,8 @@ jobs:
         {
           "github_id": "$GITHUB_ID",
           "created_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-        }EOF
+        }
+        EOF
         
         mkdir -p records/users
         touch records/users/$GITHUB_ID
