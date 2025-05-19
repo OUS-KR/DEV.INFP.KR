@@ -62,7 +62,7 @@ jobs:
     - name: Create user page
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
-        GITHUB_ID: ${{ github.event.issue.user.login }}
+        GITHUB_ID: ${{ github.event.issue.user.id }}
       run: |
         mkdir -p "public/u/$USER_ID"
         sed "s/\${USER_ID}/$USER_ID/g" templates/user.html > "public/u/$USER_ID/index.html"
