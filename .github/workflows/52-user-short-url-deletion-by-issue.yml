@@ -2,7 +2,7 @@ name: User short URL deletion by issue
   
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
     
 jobs:
   user-short-url-deletion:
