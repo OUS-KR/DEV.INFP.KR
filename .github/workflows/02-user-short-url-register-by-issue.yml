@@ -2,7 +2,7 @@ name: User short URL register by issue
   
 on:
   issues:
-    types: [opened, edited]
+    types: [opened]
     
 jobs:
   user-short-url-register:
