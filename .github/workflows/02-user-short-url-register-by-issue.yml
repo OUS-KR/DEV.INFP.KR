@@ -37,6 +37,13 @@ jobs:
           exit 1
         fi
         
+        if [[ ! "$ORIGINAL_URL" =~ ^https?:// ]]; then
+          echo "올바르지 않은 원본 URL 형식" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          echo "original_url=" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
         validate_segment() {
           SEGMENT="$1"
           echo "SEGMENT: $SEGMENT"
