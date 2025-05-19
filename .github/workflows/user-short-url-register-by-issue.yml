@@ -30,6 +30,20 @@ jobs:
         echo "Extracted ORIGINAL_URL: $ORIGINAL_URL"
         echo "Extracted SHORT_PATH: $SHORT_PATH"
         
+        if [[ ! "$USER_ID" =~ ^[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]$ ]]; then
+          echo "올바르지 않은 아이디 형식" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          echo "user_id=" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
+        if [[ ! "$SHORT_PATH" =~ ^[a-z0-9](?:[a-z0-9]|[a-z0-9_-]+[a-z0-9])?(?:/[a-z0-9](?:[a-z0-9]|[a-z0-9_-]+[a-z0-9])?)*$ ]]; then
+          echo "올바르지 않은 단축 URL 경로 형식" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          echo "short_path=" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         echo "original_url=$ORIGINAL_URL" >> $GITHUB_OUTPUT
         echo "short_path=$SHORT_PATH" >> $GITHUB_OUTPUT
