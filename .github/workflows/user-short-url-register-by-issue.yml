@@ -26,6 +26,10 @@ jobs:
         ORIGINAL_URL=$(echo "$BODY" | grep -A1 '원본 URL' | tail -n1 | xargs)
         SHORT_PATH=$(echo "$BODY" | grep -A1 '단축 URL 경로' | tail -n1 | xargs)
         
+        echo "Extracted USER_ID: $USER_ID"
+        echo "Extracted ORIGINAL_URL: $ORIGINAL_URL"
+        echo "Extracted SHORT_PATH: $SHORT_PATH"
+        
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         echo "original_url=$ORIGINAL_URL" >> $GITHUB_OUTPUT
         echo "short_path=$SHORT_PATH" >> $GITHUB_OUTPUT
