@@ -47,7 +47,7 @@ jobs:
         
         IFS='/' read -ra PARTS <<< "$SHORT_PATH"
         for SEGMENT in "${PARTS[@]}"; do
-          if [[ ${#SEGMENT} -gt 20 ]] || ! validate_segment "$SEGMENT"; then
+          if ! validate_segment "$SEGMENT"; then
             echo "올바르지 않은 단축 URL 경로 형식: $SEGMENT" > comment.md
             gh issue comment "$ISSUE_NUMBER" -F comment.md
             echo "short_path=" >> $GITHUB_OUTPUT
