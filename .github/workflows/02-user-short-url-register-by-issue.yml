@@ -1,4 +1,4 @@
-name: User register by issue
+name: User short URL register by issue
   
 on:
   issues:
