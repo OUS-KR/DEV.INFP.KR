@@ -22,9 +22,9 @@ jobs:
       id: extract
       run: |
         BODY="${{ github.event.issue.body }}"
-        USER_ID=$(echo "$BODY" | awk '/### 사용자 아이디/{getline; getline; print}' | xargs)
-        ORIGINAL_URL=$(echo "$BODY" | awk '/### 원본 URL/{getline; getline; print}' | xargs)
-        SHORT_PATH=$(echo "$BODY" | awk '/### 단축 URL 경로/{getline; getline; print}' | xargs)
+        USER_ID=$(echo "$BODY" | awk '/### 사용자 아이디/{getline; getline; print}' | xargs | tr -d '\r\n')
+        ORIGINAL_URL=$(echo "$BODY" | awk '/### 원본 URL/{getline; getline; print}' | xargs | tr -d '\r\n')
+        SHORT_PATH=$(echo "$BODY" | awk '/### 단축 URL 경로/{getline; getline; print}' | xargs | tr -d '\r\n')
         
         echo "Extracted USER_ID: $USER_ID"
         echo "Extracted ORIGINAL_URL: $ORIGINAL_URL"
