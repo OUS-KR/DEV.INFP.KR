@@ -37,12 +37,23 @@ jobs:
           exit 1
         fi
         
-        if [[ ! "$SHORT_PATH" =~ ^[a-z0-9](?:[a-z0-9]|[a-z0-9_-]+[a-z0-9])?(?:/[a-z0-9](?:[a-z0-9]|[a-z0-9_-]+[a-z0-9])?)*$ ]]; then
-          echo "올바르지 않은 단축 URL 경로 형식" > comment.md
-          gh issue comment "$ISSUE_NUMBER" -F comment.md
-          echo "short_path=" >> $GITHUB_OUTPUT
-          exit 1
-        fi
+        validate_segment() {
+          SEGMENT="$1"
+          if [[ ! "$SEGMENT" =~ ^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{0,18}[a-zA-Z0-9])?$ ]]; then
+            return 1
+          fi
+          return 0
+        }
+        
+        IFS='/' read -ra PARTS <<< "$SHORT_PATH"
+        for SEGMENT in "${PARTS[@]}"; do
+          if [[ ${#SEGMENT} -gt 20 ]] || ! validate_segment "$SEGMENT"; then
+            echo "올바르지 않은 단축 URL 경로 형식: $SEGMENT" > comment.md
+            gh issue comment "$ISSUE_NUMBER" -F comment.md
+            echo "short_path=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+        done
         
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         echo "original_url=$ORIGINAL_URL" >> $GITHUB_OUTPUT
