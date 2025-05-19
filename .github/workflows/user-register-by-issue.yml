@@ -33,12 +33,10 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       id: extract
       run: |
-        echo "${{ github.event.issue.body }}" > issue_body.txt
+        BODY="${{ github.event.issue.body }}"
         
-        USER_ID=$(grep -v '^\s*$' issue_body.txt | tail -n1 | sed 's/^[ \t]*//;s/[ \t]*$//')
+        USER_ID=$(echo "$BODY" | grep -v '^\s*$' | tail -n1 | sed 's/^[ \t]*//;s/[ \t]*$//')
         echo "Extracted USER_ID: $USER_ID"
-        
-        rm issue_body.txt
         
         if [[ ! "$USER_ID" =~ ^[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]$ ]]; then
           echo "올바르지 않은 아이디 형식" > comment.md
