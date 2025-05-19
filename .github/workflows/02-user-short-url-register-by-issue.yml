@@ -80,6 +80,22 @@ jobs:
           exit 1
         fi
         
+    - name: Check GitHub user ownership
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        GITHUB_ID: ${{ github.event.issue.user.login }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        META_FILE="public/u/$USER_ID/meta.json"
+        
+        GITHUB_ID_META_FILE=$(jq -r '.github_id // empty' "$META_FILE")
+        if [ "$GITHUB_ID" != "$GITHUB_ID_META_FILE" ]; then
+          echo "권한이 없습니다" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          exit 1
+        fi
+        
     - name: Create user short URL page
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
