@@ -2,7 +2,7 @@ name: User register by issue
   
 on:
   issues:
-    types: [opened, edited]
+    types: [opened, edited, reopened, closed]
     
 jobs:
   user-short-url-register:
