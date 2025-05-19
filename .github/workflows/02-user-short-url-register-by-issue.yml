@@ -67,3 +67,15 @@ jobs:
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         echo "original_url=$ORIGINAL_URL" >> $GITHUB_OUTPUT
         echo "short_path=$SHORT_PATH" >> $GITHUB_OUTPUT
+        
+    - name: Check if user exists
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ ! -d "public/u/$USER_ID" ]; then
+          echo "존재하지 않는 사용자 아이디: **$USER_ID**" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          exit 1
+        fi
