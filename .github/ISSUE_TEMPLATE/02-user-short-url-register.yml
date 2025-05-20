@@ -1,7 +1,7 @@
 ---
-name: 사용자 단축 URL 등록
+name: 사용자 정의 단축 URL 등록
 description: "{도메인}/u/{사용자_아이디}/{단축 경로} 형태의 사용자 정의 단축 URL 등록"
-title: "[USER SHORT URL REGISTER] 사용자 단축 URL 등록"
+title: "[USER SHORT URL REGISTER] 사용자 정의 단축 URL 등록"
 labels: user-short-url-register
 assignees: OUS-KR
 body:
