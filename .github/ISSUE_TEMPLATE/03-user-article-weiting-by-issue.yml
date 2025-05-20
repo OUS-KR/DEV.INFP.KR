@@ -9,7 +9,7 @@ body:
     id: user-id
     attributes:
       label: 사용자 아이디
-      description: "..."
+      description: "등록한 본인의 사용자 아이디"
       placeholder: "예: my_user-id"
     validations:
       required: true
