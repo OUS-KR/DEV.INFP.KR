@@ -26,7 +26,6 @@ body:
     attributes:
       label: 사용자 글 제목
       description: "페이지 타이틀로 사용될 사용자 글 제목"
-      placeholder: ""
     validations:
       required: true
   #- type: checkboxes
@@ -42,7 +41,6 @@ body:
     attributes:
       label: 사용자 글
       description: "마크다운 사용법: https://docs.github.com/ko/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
-      placeholder: ""
     validations:
       required: true
 ---
