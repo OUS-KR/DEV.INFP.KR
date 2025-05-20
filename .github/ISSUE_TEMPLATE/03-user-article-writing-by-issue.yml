@@ -1,6 +1,6 @@
 ---
 name: 사용자 글 작성
-description: "사용자 정의 {도메인}/u/{사용자_아이디}/{단축 경로} 위치에 글 작성"
+description: "{도메인}/u/{사용자_아이디}/{단축 경로} 형태의 사용자 정의 위치에 글 작성"
 title: "[USER ARTICLE WRTING] 사용자 글 작성"
 labels: user-article-writing
 assignees: OUS-KR
@@ -17,8 +17,8 @@ body:
   - type: checkboxes
     id: agreement
     attributes:
-      label: 댓글 시스템 활성화
-      description: Giscus 기반 댓글 시스템 활성화
+      label: 사용자 글 관련 설정
+      description: 사용자 글 관련 다양한 옵션 설정
       options:
         - label: 댓글 시스템 활성화 여부
           required: true
