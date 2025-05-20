@@ -13,16 +13,22 @@ body:
       placeholder: "예: my_user-id"
     validations:
       required: true
-
-  - type: checkboxes
-    id: agreement
+  - type: input
+    id: short-url
     attributes:
-      label: 사용자 글 관련 설정
-      description: 사용자 글 관련 다양한 옵션 설정
-      options:
-        - label: 댓글 시스템 활성화 여부
-          required: true
-
+      label: 단축 URL 경로
+      description: "각 경로 이름은 20자리 이하의 영어 (a-z, A-Z), 숫자 (0-9), 하이픈 (-), 언더스코어 (_)로 구성되고, 시작과 끝은 영어 소문자와 숫자만 가능하며, 경로는 슬래시 (/)로 구분"
+      placeholder: "예: instagram, sns/instagram, sns/instagram/profile, ..."
+    validations:
+      required: true
+  #- type: checkboxes
+  #  id: agreement
+  #  attributes:
+  #    label: 사용자 글 관련 설정
+  #    description: 사용자 글 관련 다양한 옵션 설정
+  #    options:
+  #      - label: 댓글 시스템 활성화 여부
+  #        required: true
   - type: textarea
     id: article
     attributes:
