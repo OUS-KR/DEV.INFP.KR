@@ -126,11 +126,7 @@ jobs:
         FILE_PATH="public/u/$USER_ID/${ARTICLE_PATH}.html"
         mkdir -p "$(dirname "$FILE_PATH")"
         
-        sed -e "s|\${USER_ID}|$USER_ID|g" \
-        -e "s|\${ARTICLE_PATH}|$ARTICLE_PATH|g" \
-        -e "s|\${ARTICLE_TITLE}|$ARTICLE_TITLE|g" \
-        -e "s|\${ARTICLE_BODY}|$ARTICLE_BODY|g" \
-        templates/user-article.html > "$FILE_PATH"
+        envsubst < templates/user-article.html > "$FILE_PATH"
         
         echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
         
