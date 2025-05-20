@@ -23,7 +23,7 @@ body:
         - label: 댓글 시스템 활성화 여부
           required: true
 
-   - type: textarea
+  - type: textarea
     id: article
     attributes:
       label: 사용자 글
