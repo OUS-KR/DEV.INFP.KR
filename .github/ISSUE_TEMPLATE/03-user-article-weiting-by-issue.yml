@@ -1,0 +1,25 @@
+---
+name: 사용자 글 작성
+description: "..."
+title: "[USER ARTICLE WRTING] 사용자 글 작성"
+labels: user-article-writing
+assignees: OUS-KR
+body:
+  - type: input
+    id: user-id
+    attributes:
+      label: 사용자 아이디
+      description: "..."
+      placeholder: "예: my_user-id"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: 댓글 시스템 활성화
+      description: Giscus 기반 댓글 시스템 활성화
+      options:
+        - label: 댓글 시스템 활성화 여부
+          required: true
+---
