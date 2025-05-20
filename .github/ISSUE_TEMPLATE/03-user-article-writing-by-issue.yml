@@ -33,7 +33,7 @@ body:
     id: article
     attributes:
       label: 사용자 글
-      description: 마크다운 기반의 글 작성 - [사용법: https://docs.github.com/ko/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-](https://docs.github.com/ko/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
+      description: 마크다운 기반의 글 작성 - 사용법: https://docs.github.com/ko/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting
       placeholder: 마크다운 기반의 글 작성
     validations:
       required: true
