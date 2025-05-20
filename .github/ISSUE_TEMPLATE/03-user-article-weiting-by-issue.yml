@@ -22,4 +22,13 @@ body:
       options:
         - label: 댓글 시스템 활성화 여부
           required: true
+
+   - type: textarea
+    id: article
+    attributes:
+      label: 사용자 글
+      description: 마크다운 기반의 글 작성
+      placeholder: 마크다운 기반의 글
+    validations:
+      required: true
 ---
