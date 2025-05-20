@@ -1,6 +1,6 @@
 ---
 name: 사용자 글 작성
-description: "..."
+description: "사용자 정의 {도메인}/u/{사용자_아이디}/{단축 경로} 위치에 글 작성"
 title: "[USER ARTICLE WRTING] 사용자 글 작성"
 labels: user-article-writing
 assignees: OUS-KR
