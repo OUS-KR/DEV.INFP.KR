@@ -1,6 +1,6 @@
 ---
 name: 사용자 글 작성
-description: "{도메인}/u/{사용자_아이디}/{단축 경로} 형태의 사용자 정의 위치에 글 작성"
+description: "{도메인}/u/{사용자_아이디}/{글 경로} 형태의 사용자 정의 위치에 글 작성"
 title: "[USER ARTICLE WRTING] 사용자 글 작성"
 labels: user-article-writing
 assignees: OUS-KR
@@ -26,7 +26,7 @@ body:
     attributes:
       label: 사용자 글 제목
       description: "페이지 타이틀로 사용될 사용자 글 제목"
-      placeholder: "..."
+      placeholder: ""
     validations:
       required: true
   #- type: checkboxes
@@ -42,7 +42,7 @@ body:
     attributes:
       label: 사용자 글
       description: "마크다운 사용법: https://docs.github.com/ko/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
-      placeholder: 마크다운 기반의 글 작성
+      placeholder: ""
     validations:
       required: true
 ---
