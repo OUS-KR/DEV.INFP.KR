@@ -13,4 +13,12 @@ body:
       placeholder: "예: my_user-id"
     validations:
       required: true
+  - type: input
+    id: article-path
+    attributes:
+      label: 사용자 글 URL 경로
+      description: "삭제할 작성된 사용자 글 URL 경로"
+      placeholder: "예: profile, blog/welcome, ..."
+    validations:
+      required: true
 ---
