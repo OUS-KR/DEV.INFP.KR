@@ -62,8 +62,7 @@ jobs:
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         echo "article_path=$ARTICLE_PATH" >> $GITHUB_OUTPUT
         echo "article_title=$ARTICLE_TITLE" >> $GITHUB_OUTPUT
-        echo "article_body_markdown=$ARTICLE_BODY_MARKDOWN" >> $GITHUB_OUTPUT
-
+        
     - name: Check if user exists
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
