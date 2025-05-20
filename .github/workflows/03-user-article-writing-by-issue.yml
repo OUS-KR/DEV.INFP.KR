@@ -1,0 +1,157 @@
+name: User article writing by issue
+  
+on:
+  issues:
+    types: [opened, edited]
+    
+jobs:
+  user-article-writing:
+    if: contains(github.event.issue.labels.*.name, 'user-article-writing')
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout main branch
+      uses: actions/checkout@v3
+      with:
+        ref: main
+    
+    - name: Extract user ID, article path, title, and body from issue body
+      env:
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      id: extract
+      run: |
+        BODY="${{ github.event.issue.body }}"
+        USER_ID=$(echo "$BODY" | awk '/### 사용자 아이디/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
+        ARTICLE_PATH=$(echo "$BODY" | awk '/### 사용자 글 URL 경로/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
+        ARTICLE_TITLE=$(echo "$BODY" | awk '/### 사용자 글 제목/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
+        ARTICLE_BODY=$(echo "$BODY" | awk '/### 사용자 글/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
+        
+        echo "Extracted USER_ID: $USER_ID"
+        echo "Extracted ARTICLE_PATH: $ARTICLE_PATH"
+        echo "Extracted ARTICLE_TITLE: $ARTICLE_TITLE"
+        echo "Extracted ARTICLE_BODY: $ARTICLE_BODY"
+        
+        if [[ ! "$USER_ID" =~ ^[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]$ ]]; then
+          echo "올바르지 않은 아이디 형식" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          echo "user_id=" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
+        validate_segment() {
+          SEGMENT="$1"
+          echo "SEGMENT: $SEGMENT"
+          
+          if [[ "$SEGMENT" =~ ^[a-zA-Z0-9](?:[a-zA-Z0-9_-]{0,18}[a-zA-Z0-9])?$ ]]; then
+            return 1
+          fi
+          return 0
+        }
+        
+        IFS='/' read -ra PARTS <<< "$ARTICLE_PATH"
+        for SEGMENT in "${PARTS[@]}"; do
+          if ! validate_segment "$SEGMENT"; then
+            echo "올바르지 않은 단축 URL 경로 형식: $SEGMENT" > comment.md
+            gh issue comment "$ISSUE_NUMBER" -F comment.md
+            echo "article_path=" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+        done
+        
+        echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
+        echo "article_path=$ARTICLE_PATH" >> $GITHUB_OUTPUT
+        echo "article_title=$ARTICLE_TITLE" >> $GITHUB_OUTPUT
+        echo "article_body=$ARTICLE_BODY" >> $GITHUB_OUTPUT
+        
+    - name: Check if user exists
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ ! -d "public/u/$USER_ID" ]; then
+          echo "존재하지 않는 사용자 아이디: **$USER_ID**" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          exit 1
+        fi
+        
+    - name: Check GitHub user ownership
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        GITHUB_ID: ${{ github.event.issue.user.id }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        META_FILE="public/u/$USER_ID/meta.json"
+        
+        GITHUB_ID_META_FILE=$(jq -r '.github_id // empty' "$META_FILE")
+        if [ "$GITHUB_ID" != "$GITHUB_ID_META_FILE" ]; then
+          echo "권한이 없습니다" > comment.md
+          gh issue comment "$ISSUE_NUMBER" -F comment.md
+          exit 1
+        fi
+        
+    - name: Create user article page
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        ORIGINAL_URL: ${{ steps.extract.outputs.original_url }}
+        SHORT_PATH: ${{ steps.extract.outputs.short_path }}
+      id: create
+      run: |
+        FILE_PATH="public/u/$USER_ID/${ARTICLE_PATH}.html"
+        mkdir -p "$(dirname "$FILE_PATH")"
+        
+        sed -e "s|\${USER_ID}|$USER_ID|g" \
+        -e "s|\${ARTICLE_PATH}|$ARTICLE_PATH|g" \
+        -e "s|\${ARTICLE_TITLE}|$ARTICLE_TITLE|g" \
+        -e "s|\${ARTICLE_BODY}|$ARTICLE_BODY|g" \
+        templates/user-article.html > "$FILE_PATH"
+        
+        echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
+        
+    - name: Setup Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+    - name: Commit and push to main
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        ARTICLE_PATH: ${{ steps.extract.outputs.article_path }}
+        FILE_PATH: ${{ steps.create.outputs.file_path }}
+      run: |
+        git checkout main
+        git add "$FILE_PATH" || true
+        git commit -m "Add user article page for $USER_ID" || echo "Nothing to commit"
+        git push origin main
+        
+    - name: Commit and push to gh-pages
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        ARTICLE_PATH: ${{ steps.extract.outputs.article_path }}
+        FILE_PATH: ${{ steps.create.outputs.file_path }}
+      run: |
+        TMP_FILE_PATH="/tmp/$USER_ID/${ARTICLE_PATH}.html"
+        mkdir -p "$(dirname "$TMP_FILE_PATH")"
+        cp -r "$FILE_PATH" "$TMP_FILE_PATH"
+        
+        git fetch origin gh-pages
+        git switch gh-pages || git checkout -b gh-pages
+        
+        GH_PAGES_FILE_PATH="u/$USER_ID/${ARTICLE_PATH}.html"
+        mkdir -p "$(dirname "$GH_PAGES_FILE_PATH")"
+        cp -r "$TMP_FILE_PATH" "$GH_PAGES_FILE_PATH"
+        
+        git add "$GH_PAGES_FILE_PATH" || true
+        git commit -m "Add user article page: $USER_ID/$ARTICLE_PATH" || echo "Nothing to commit"
+        git push origin gh-pages
+        
+    - name: Comment on issue
+      env:
+        USER_ID: ${{ steps.extract.outputs.user_id }}
+        ARTICLE_PATH: ${{ steps.extract.outputs.article_path }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "사용자 **$USER_ID**의 글 **$ARTICLE_PATH** 작성 완료" > comment.md
+        gh issue comment ${{ github.event.issue.number }} -F comment.md
