@@ -109,7 +109,11 @@ jobs:
         
         echo "ARTICLE_BODY: $ARTICLE_BODY"
         
-        echo "article_body=$ARTICLE_BODY" >> $GITHUB_OUTPUT
+        {
+          echo "article_body<<EOF"
+          echo "$ARTICLE_BODY"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
         
     - name: Create user article page
       env:
