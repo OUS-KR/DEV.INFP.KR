@@ -62,6 +62,11 @@ jobs:
         echo "user_id=$USER_ID" >> $GITHUB_OUTPUT
         echo "article_path=$ARTICLE_PATH" >> $GITHUB_OUTPUT
         echo "article_title=$ARTICLE_TITLE" >> $GITHUB_OUTPUT
+        {
+          echo "article_body_markdown<<EOF"
+          echo "$ARTICLE_BODY_MARKDOWN"
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
         
     - name: Check if user exists
       env:
@@ -98,16 +103,12 @@ jobs:
       run: |
         sudo apt-get install -y pandoc
         
-        ARTICLE_BODY_HTML=$(echo "$ARTICLE_BODY_MARKDOWN" | pandoc -f markdown -t html)
-        ARTICLE_BODY_JSON=$(echo "$ARTICLE_BODY_HTML" | jq -Rs .)
-        ARTICLE_BODY=$(echo "$ARTICLE_BODY_JSON" | jq -r)
+        echo "$ARTICLE_BODY_MARKDOWN" > body.md
+        ARTICLE_BODY=$(pandoc -f markdown -t html body.md | jq -Rs . | jq -r)
+        rm body.md
         
-        echo "ARTICLE_BODY_HTML: $ARTICLE_BODY_HTML"
-        echo "ARTICLE_BODY_JSON: $ARTICLE_BODY_JSON"
         echo "ARTICLE_BODY: $ARTICLE_BODY"
         
-        echo "article_body_html=$ARTICLE_BODY_HTML" >> $GITHUB_OUTPUT
-        echo "article_body_json=$ARTICLE_BODY_JSON" >> $GITHUB_OUTPUT
         echo "article_body=$ARTICLE_BODY" >> $GITHUB_OUTPUT
         
     - name: Create user article page
