@@ -25,7 +25,7 @@ jobs:
         USER_ID=$(echo "$BODY" | awk '/### 사용자 아이디/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
         ARTICLE_PATH=$(echo "$BODY" | awk '/### 사용자 글 URL 경로/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
         ARTICLE_TITLE=$(echo "$BODY" | awk '/### 사용자 글 제목/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
-        ARTICLE_BODY=$(echo "$BODY" | awk '/### 사용자 글/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
+        ARTICLE_BODY=$(echo "$BODY" | awk '/### 사용자 글 내용/{getline; getline; print}' | xargs | sed 's/^[ \t]*//;s/[ \t]*$//')
         
         echo "Extracted USER_ID: $USER_ID"
         echo "Extracted ARTICLE_PATH: $ARTICLE_PATH"
@@ -95,8 +95,9 @@ jobs:
     - name: Create user article page
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
-        ORIGINAL_URL: ${{ steps.extract.outputs.original_url }}
-        SHORT_PATH: ${{ steps.extract.outputs.short_path }}
+        ARTICLE_PATH: ${{ steps.extract.outputs.article_path }}
+        ARTICLE_TITLE: ${{ steps.extract.outputs.article_title }}
+        ARTICLE_BODY: ${{ steps.extract.outputs.article_body }}
       id: create
       run: |
         FILE_PATH="public/u/$USER_ID/${ARTICLE_PATH}.html"

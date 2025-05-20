@@ -39,7 +39,7 @@ body:
   - type: textarea
     id: article
     attributes:
-      label: 사용자 글
+      label: 사용자 글 내용
       description: "마크다운 사용법: https://docs.github.com/ko/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
     validations:
       required: true
