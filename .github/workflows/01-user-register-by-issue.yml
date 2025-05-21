@@ -112,8 +112,8 @@ jobs:
     - name: Comment on issue
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
-        REPO_NAME: ${{ github.repository }}
+        REPO_NAME: ${{ github.repository.name }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "사용자 **$USER_ID** 등록 완료: $REPO_NAME/u/$USER_ID" > comment.md
+        echo "사용자 **$USER_ID** 등록 완료: [$REPO_NAME/u/$USER_ID](https://${REPO_NAME}/u/$USER_ID)" > comment.md
         gh issue comment ${{ github.event.issue.number }} -F comment.md

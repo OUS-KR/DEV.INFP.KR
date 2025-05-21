@@ -154,8 +154,8 @@ jobs:
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
         SHORT_PATH: ${{ steps.extract.outputs.short_path }}
-        REPO_NAME: ${{ github.repository }}
+        REPO_NAME: ${{ github.repository.name }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "사용자 **$USER_ID**의 단축 URL **$SHORT_PATH** 등록 완료: $REPO_NAME/u/$USER_ID/$SHORT_PATH" > comment.md
+        echo "사용자 **$USER_ID**의 단축 URL **$SHORT_PATH** 등록 완료: [$REPO_NAME/u/$USER_ID/$SHORT_PATH](https://${REPO_NAME}/u/$USER_ID/$SHORT_PATH)" > comment.md
         gh issue comment ${{ github.event.issue.number }} -F comment.md
