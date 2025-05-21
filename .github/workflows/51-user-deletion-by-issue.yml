@@ -92,7 +92,7 @@ jobs:
     - name: Comment on issue
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
-        REPO_NAME: ${{ github.repository.name }}
+        REPO_NAME: ${{ github.event.repository.name }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "사용자 **$USER_ID** 삭제 완료: [$REPO_NAME/u/$USER_ID](https://${REPO_NAME}/u/$USER_ID)" > comment.md

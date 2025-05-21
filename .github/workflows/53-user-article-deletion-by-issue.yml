@@ -124,7 +124,7 @@ jobs:
       env:
         USER_ID: ${{ steps.extract.outputs.user_id }}
         ARTICLE_PATH: ${{ steps.extract.outputs.article_path }}
-        REPO_NAME: ${{ github.repository.name }}
+        REPO_NAME: ${{ github.event.repository.name }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         echo "사용자 **$USER_ID**의 등록된 작성 글 **$ARTICLE_PATH** 삭제 완료: [$REPO_NAME/u/$USER_ID/$ARTICLE_PATH](https://${REPO_NAME}/u/$USER_ID/$ARTICLE_PATH)" > comment.md
