@@ -1,13 +1,28 @@
 <html>
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css" rel="stylesheet">
+    <style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
 </head>
 <body>
     <h1>Welcome, infp!</h1>
     <p>Article path: articles/test5</p>
     <article>
       <h2>Article title: 테스트</h2>
-      <div><blockquote>
+      <div class="markdown-body"><blockquote>
 <p>[!NOTE] Useful information that users should know, even when skimming
 content. <a href="https://infp.kr">INFP.KR</a></p>
 </blockquote>
