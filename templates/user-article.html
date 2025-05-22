@@ -1,13 +1,28 @@
 <html>
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css" rel="stylesheet">
+    <style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
 </head>
 <body>
     <h1>Welcome, ${USER_ID}!</h1>
     <p>Article path: ${ARTICLE_PATH}</p>
     <article>
       <h2>Article title: ${ARTICLE_TITLE}</h2>
-      <div>${ARTICLE_BODY}</div>
+      <div class="markdown-body">${ARTICLE_BODY}</div>
     </article>
 </body>
 </html>
